@@ -18,7 +18,16 @@ var activeTab = ".checklist__tabs-item--active";
 var button = $(".checklist__button");1
 
 // Загрузка из localStorage
-$(".checklist__rows").html(localStorage["checklist"]);
+function load() {
+  $(".checklist__rows").html(localStorage["checklist"]);
+  $(".checklist__row").each(function() {
+    if ($(this).hasClass("checklist__row--checked")) {
+      $(this).find(".checklist__checkbox").trigger("click");
+
+    }
+  })
+}
+load()
 
 // Сохранение в localStorage
 function save() {

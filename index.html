@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/fontello.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <title>Checklist</title>
+    </head>
+    <body>
+		<div class="checklist">
+		  <div class="checklist__form">
+		    <input class="checklist__input" type="text" placeholder="Введите текст">
+		    <div class="checklist__button">
+		    	<i class="icon icon-plus-1"></i>
+		    </div>
+		  </div>
+		  <ul class="checklist__tabs">
+		    <li class="checklist__tabs-item" data-type="all">Все</li>
+		    <li class="checklist__tabs-item checklist__tabs-item--active" data-type="new">Новые</li>
+		    <li class="checklist__tabs-item" data-type="archive">Архив</li>
+		  </ul>
+		  <div class="checklist__rows"></div>
+		</div>
+        <script type="text/javascript" src="cordova.js"></script>
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
+    </body>
+</html>

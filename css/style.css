@@ -1,0 +1,218 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.checklist__form {
+    display: table;
+    width: 100%;
+}
+
+.checklist__button {
+    width: 50px;
+    height: 60px;
+    border: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    line-height: 60px;
+    cursor: pointer;
+}
+
+.checklist__input {
+    display: table-cell;
+    max-width: 100%;
+    width: 100%;
+    border: 0 none;
+    box-sizing: border-box;
+    padding: 0 20px;
+    font-size: 16px;
+    background: #fff;
+    height: 60px;
+    vertical-align: middle;
+    color: #666;
+    border-bottom: 1px solid #e5e5e5;
+    transition: .2s ease-in-out;
+    transition-property: color,background-color,border;
+}
+
+.checklist__input:focus {
+    border-color: #1e87f0;
+    outline: 0;
+}
+
+.checklist__text {
+    display: inline-block;
+    width: calc(100% - 55px);
+    margin-left: 25px;
+}
+
+/* ROW */
+.checklist__row {
+    background-color: #1e87f0;
+    position: relative;
+    color: #fff;
+    text-align: left;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 28px;
+}
+
+.checklist__row {
+    display: none;
+}
+
+.checklist__row--new {
+    display: block;
+}
+
+/* TABS */
+.checklist__tabs {
+    width: 100%;
+    background: #fff;
+    margin: 0;
+    padding-bottom: 0px;
+    z-index: 1;
+    display: table;
+    text-transform: uppercase;
+    font-size: 14px;
+    padding-left: 0;
+}
+
+.checklist__tabs:before {
+    left: 0;
+}
+
+.checklist__tabs-item {
+    color: #999;
+    border-color: #1e87f0;
+    box-sizing: border-box;
+    text-align: center;
+    width: 33%;
+    display: table-cell;
+    padding: 15px 0;
+    cursor: pointer;
+    border-top: 1px solid transparent;
+    transition: all, .25s;
+}
+
+.checklist__tabs-item--active {
+    color: #333;
+    border-color: #1e87f0;
+    color: #222;
+}
+
+/* RETURN */
+.checklist__row--return {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 40px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    cursor: pointer;
+    display: none;
+}
+
+/* REMOVE */
+.checklist__row--remove {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    cursor: pointer;
+}
+
+/* CHECKBOX */
+.checklist__checkbox {
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    overflow: hidden;
+    margin-top: -4px;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    border: 1px solid #ccc;
+    transition: .2s ease-in-out;
+    transition-property: background-color,border;
+    outline: none;
+    color: inherit;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.checklist__checkbox:before {
+    content: '';
+    font-family: "fontello";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.checklist__checkbox:checked:before {
+    content: '\e805';
+}
+
+/* CHECKED */
+.checklist__row--checked {
+    background: #32d296;
+    display: block;
+}
+
+.checklist__row--checked .checklist__checkbox {
+    background-color: #32d296;
+    border: 0 !important;
+}
+
+.checklist__row--checked .checklist__label {
+    background-color: #32d296;
+}
+
+.checklist__row--checked .checklist__checkbox:focus {
+    background-color: #32d296;
+}
+
+/* ARCHIVE*/
+.checklist__row--archive {
+    display: block;
+    background: #f8f8f8;
+    color: #222;
+}
+
+.checklist__row--archive .checklist__row--return {
+    display: block;
+}
+
+.checklist__row--archive .checklist__label {
+    pointer-events: none;
+}
+
+.checklist__row--archive .checklist__checkbox {
+    background-color: transparent;
+    border: none !important;
+}

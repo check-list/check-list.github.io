@@ -27,7 +27,7 @@ body {
     width: 100%;
     border: 0 none;
     box-sizing: border-box;
-    padding: 0 20px;
+    padding: 0 50px 0 20px;
     font-size: 16px;
     background: #fff;
     height: 60px;
@@ -45,8 +45,9 @@ body {
 
 .checklist__text {
     display: inline-block;
-    width: calc(100% - 55px);
+    width: calc(100% - 85px);
     margin-left: 25px;
+    word-wrap: break-word;
 }
 
 /* ROW */

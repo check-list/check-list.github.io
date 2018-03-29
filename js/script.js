@@ -48,7 +48,7 @@ function addItem() {
   }
   input.val("");
   $(activeTab).trigger("click");
-  save()
+  save();
 }
 
 button.on("click", addItem)
@@ -69,7 +69,7 @@ $(document).on('click', '.checklist__row--remove', function() {
 
   $(this).closest(item).addClass("checklist__row--archive").removeClass("checklist__row--new")
   $(".checklist__tabs-item--active").trigger("click");
-  save()
+  save();
 });
 
 // RETURN
@@ -78,6 +78,8 @@ $(document).on('click', '.checklist__row--return', function() {
   if (thisRow.hasClass("checklist__row--archive")) {
     thisRow.removeClass("checklist__row--archive").addClass("checklist__row--new");
   }
+  $(".checklist__tabs-item--active").trigger("click");
+  save();
 })
 
 // LABEL
@@ -91,7 +93,7 @@ $(document).on("click", ".checklist__label", function() {
     $(this).closest(item).removeClass("checklist__row--checked").addClass("checklist__row--new")
     $(activeTab).trigger("click");
   }
-  save()
+  save();
 })
 
 // TABS

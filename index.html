@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="css/fontello.css">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <link rel="icon" href="favicon.ico" type="image/x-icon" />
-        <title>Checklist</title>
-    </head>
-    <body>
-		<div class="checklist">
-		  <div class="checklist__form">
-		    <input class="checklist__input" type="text" placeholder="Введите текст">
-		    <div class="checklist__button">
-		    	<i class="icon icon-plus-1"></i>
-		    </div>
-		  </div>
-		  <ul class="checklist__tabs">
-			<li class="checklist__tabs-item" data-type="new">Новые</li>
-		    <li class="checklist__tabs-item checklist__tabs-item--active" data-type="all">Все</li>
-		    <li class="checklist__tabs-item" data-type="archive">Архив</li>
-		  </ul>
-		  <div class="checklist__rows"></div>
+<head>
+	<title>Todolist</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/all.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="todolist">
+	<div class="todolist__form">
+		<input type="text" class="todolist__input js-todolist-input" placeholder="Введите текст...">
+		<div class="todolist__buttons">
+			<div class="todolist__button js-todolist-add">
+			    <i class="fal fa-plus"></i>
+			</div>
 		</div>
-        <script type="text/javascript" src="cordova.js"></script>
-		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-		<script type="text/javascript" src="js/script.js"></script>
-    </body>
+	</div>
+	<div class="todolist__tabs">
+		<div class="todolist__tab-item js-todolist-tab-item" data-status="new">Новые</div>
+		<div class="todolist__tab-item js-todolist-tab-item todolist__tab-item--active" data-status="all">Все</div>
+		<div class="todolist__tab-item js-todolist-tab-item" data-status="archive">Архив</div>
+	</div>
+	<div class="todolist__rows js-todolist-rows"></div>
+</div>
+
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/script.js"></script>
+</body>
 </html>

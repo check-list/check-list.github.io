@@ -1,114 +1,201 @@
-
-var input = $(".checklist__input");
-var template =
-    `<div class='checklist__row checklist__row--new'>
-      <label class='checklist__label'>
-        <input class='checklist__checkbox icon' type='checkbox'> 
-      </label>
-      <div class='checklist__text'></div>
-      <div class='checklist__row--return'>
-        <i class='icon icon-ccw'></i>
-      </div>
-      <div class='checklist__row--remove'>
-        <i class='icon icon-cancel'></i>
-      </div>
-    </div>`;
-var item = ".checklist__row";
-var activeTab = ".checklist__tabs-item--active";
-var button = $(".checklist__button");1
-
-// Загрузка из localStorage
-function load() {
-  $(".checklist__rows").html(localStorage["checklist"]);
-  $(".checklist__row").each(function() {
-    if ($(this).hasClass("checklist__row--checked")) {
-      $(this).find(".checklist__checkbox").trigger("click");
-
-    }
-  })
+var doc = $(document);
+var input = $(".js-todolist-input");
+var rows = $(".js-todolist-rows");
+var tab = $(".js-todolist-tab-item");
+var tasks = [];
+var button = {
+	add: $(".js-todolist-add"),
+	mark: ".js-todolist-checkbox",
+	remove: ".js-todolist-row-remove",
+	return: ".js-todolist-row-return"
 }
-load()
+var classes = {
+	row: "todolist__row",
+	checked: "todolist__row--checked",
+	archive: "todolist__row--archive",
+	active: "todolist__tab-item--active"
 
-// Сохранение в localStorage
-function save() {
-  localStorage["checklist"] = $(".checklist__rows").html();
 }
+var template = `
+		<div class="todolist__row">
+	      	<label class="todolist__label">
+	        	<input class="todolist__checkbox js-todolist-checkbox" type="checkbox">
+	      	</label>
+	      	<div class="todolist__text"></div>
+	      	<div class="todolist__row--return js-todolist-row-return"><i class="fal fa-undo"></i></div>
+	      	<div class="todolist__row--remove js-todolist-row-remove"><i class="fal fa-times"></i></div>
+    	</div>`;
 
-// Добавление элемента
-function addItem() {
-  var checklistArray = input.val().split(",");
+var toDoList;
 
-  if (input.val() == "") return;
-  
-  for (var i = 0; i < checklistArray.length; i++) {
-    if (checklistArray[i] == " ") continue
-    if (checklistArray[i] == "") continue
+// DB localStorage
 
-    $(".checklist__rows").append(template).find(".checklist__row").last().find(".checklist__text").html(checklistArray[i]);
-  }
-  input.val("");
-  $(activeTab).trigger("click");
-  save();
+var database = {
+	save: (array, db) => {
+		localStorage[db] = JSON.stringify(window[array]);
+	},
+	load: (array, db) => {
+		window[array] = JSON.parse(localStorage[db]);
+	},
 }
 
-button.on("click", addItem)
+function trim(value) {
+	return value.trim().replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+}
 
-input.on("keydown", function(e) {
-  if (e.keyCode == 13) {
-    addItem();
-  }
+function Task(text) {
+	this.text = text;
+	this.status = ["new"];
+}
+
+function ToDoList() {
+	this.add = (array, item) => {
+		array.push(item);
+	}
+	this.remove = (array, index) => {
+		array = array.splice(index, 1);
+	}
+	this.changeStatus = (array, index, status) => {
+		var pos = array[index].status.indexOf(status);
+
+		if(pos == -1) {
+			array[index].status.push(status);
+		} else {
+			array[index].status.splice(pos, 1);
+		}
+	}
+	this.render = (el, array, temp) => {
+		el.empty();
+
+		function getClasses(prefix, index) {
+			var result = "";
+
+			array[index].status.forEach(status => {
+				result += prefix + status + " ";
+			})
+
+			return result;
+		}
+ 
+		array.forEach((item, index) => {
+			el.append(temp)
+			.find("." + classes.row)
+			.last()
+			.addClass(getClasses("todolist__row--", index))
+			.find(".todolist__text")
+			.last()
+			.html(item.text);
+		})
+	}
+	this.template = template;
+}
+
+function addTask() {
+	if(input.val() == "" || input.val() == " " || trim(input.val()).length == 0) return;
+
+	var split = input.val().split(",");
+
+	split.forEach(item => toDoList.add(tasks, new Task(trim(item))));
+	database.save("tasks", "todolist");
+	database.load("tasks", "todolist");
+	toDoList.render(rows, tasks, toDoList.template);
+	input.val("");
+}
+
+function clickActiveTab() {
+	$("." + classes.active).click();
+}
+
+function init() {
+	toDoList = new ToDoList();
+	database.load("tasks", "todolist");
+	toDoList.render(rows, tasks, toDoList.template);
+}
+
+// ADD KEYDOWN
+
+doc.on("keydown", e => { e.keyCode == 13 && addTask() });
+
+// ADD BUTTON
+
+button.add.on("click", addTask);
+
+// MARK
+
+rows.on("click", button.mark, e => {
+	var $this = $(e.target);
+	var $row = $this.closest("." + classes.row);
+	var $index = $row.index();
+
+	toDoList.changeStatus(tasks, $index, "checked");
+	database.save("tasks", "todolist");
+	database.load("tasks", "todolist");
+	toDoList.render(rows, tasks, toDoList.template);
+	clickActiveTab();
 })
 
 // REMOVE
-$(document).on('click', '.checklist__row--remove', function() {
-  var thisRow = $(this).closest(item);
 
-  if (thisRow.hasClass("checklist__row--archive")) {
-    thisRow.remove();
-  }
+rows.on("click", button.remove, e => {
+	var $this = $(e.target);
+	var $row = $this.closest("." + classes.row);
+	var $index = $row.index();
 
-  $(this).closest(item).addClass("checklist__row--archive").removeClass("checklist__row--new")
-  $(".checklist__tabs-item--active").trigger("click");
-  save();
-});
+	if(tasks[$index].status.indexOf("archive") == -1) {
+		toDoList.changeStatus(tasks, $index, "archive");
+	} else {
+		toDoList.remove(tasks, $index);
+	}
+	database.save("tasks", "todolist");
+	database.load("tasks", "todolist");
+	toDoList.render(rows, tasks, toDoList.template);
+	clickActiveTab();
+})
 
 // RETURN
-$(document).on('click', '.checklist__row--return', function() {
-  var thisRow = $(this).closest(item);
-  if (thisRow.hasClass("checklist__row--archive")) {
-    thisRow.removeClass("checklist__row--archive").addClass("checklist__row--new");
-  }
-  $(".checklist__tabs-item--active").trigger("click");
-  save();
+
+rows.on("click", button.return, e => {
+	var $this = $(e.target);
+	var $row = $this.closest("." + classes.row);
+	var $index = $row.index();
+
+	toDoList.changeStatus(tasks, $index, "archive");
+	database.save("tasks", "todolist");
+	database.load("tasks" , "todolist");
+	toDoList.render(rows, tasks, toDoList.template);
+	clickActiveTab();
 })
 
-// LABEL
-$(document).on("click", ".checklist__label", function() {
-  var checkbox = $(this).find(".checklist__checkbox");
-  
-  if (checkbox.is(":checked")) {
-    $(this).closest(item).addClass("checklist__row--checked").removeClass("checklist__row--new");
-    $(activeTab).trigger("click");
-  } else {
-    $(this).closest(item).removeClass("checklist__row--checked").addClass("checklist__row--new")
-    $(activeTab).trigger("click");
-  }
-  save();
+// TAB
+
+tab.on("click", e => {
+	var $this = $(e.target);
+	var status = $this.data("status");
+	var prefix = "todolist__row--";
+	var $row = rows.find("." + classes.row);
+
+	tab.removeClass(classes.active);
+	$this.addClass(classes.active);
+
+	$row.hide();
+
+	switch(status) {
+		case "all":
+			$row.show();
+			break;
+		case "archive":
+			rows.find("." + classes.archive).show();
+			break;
+		case "new":
+			$row.each((index, item)=>{
+				var $item = $(item);
+
+				if(!$item.hasClass(classes.checked) && !$item.hasClass(classes.archive)) {
+					$item.show();
+				}
+			})
+			break;
+	}
 })
 
-// TABS
-$(".checklist__tabs-item").on("click", function() {
-  var data = $(this).data("type");
-
-  $(".checklist__tabs-item").removeClass("checklist__tabs-item--active");
-  $(this).addClass("checklist__tabs-item--active")
-  $(item).hide();
-  $(".checklist__row--" + data).show();
-  if (data == "all") {
-    $(item).show();
-  }
-})
-
-
-// TRIGGER
-$(activeTab).trigger("click");
+init();
